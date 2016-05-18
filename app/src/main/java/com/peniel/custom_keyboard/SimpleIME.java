@@ -1,11 +1,11 @@
 package com.peniel.custom_keyboard;
+import android.view.inputmethod.InputConnection;
 
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputConnection;
 
 /**
  * Created by 진호 on 2016-05-10.
