@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">custom_keyboard</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="simple_ime">Simple IME</string>
+    <string name="subtype_en_US">English</string>
+</resources>
