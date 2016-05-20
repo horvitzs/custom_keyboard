@@ -9,8 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.peniel.custom_keyboard.MainActivity">
 
-    <TextView
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="setting color"
+        android:id="@+id/keyboard_color_button"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:onClick="myOnClick"/>
 </RelativeLayout>

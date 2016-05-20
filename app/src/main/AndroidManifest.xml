@@ -18,16 +18,27 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".SimpleIME"
+        <service
+            android:name=".SimpleIME"
             android:label="@string/simple_ime"
-            android:permission="android.permission.BIND_INPUT_METHOD"
-            >
-            <meta-data android:name="android.view.im" android:resource="@xml/method"/>
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
+
             <intent-filter>
-                <action android:name="android.view.InputMethod"/>
+                <action android:name="android.view.InputMethod" />
             </intent-filter>
         </service>
 
+        <activity
+            android:name=".Theme_Change_Activity"
+            android:label="@string/title_activity_theme__change_"></activity>
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

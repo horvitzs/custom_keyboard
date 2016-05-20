@@ -1,4 +1,6 @@
 package com.peniel.custom_keyboard;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.inputmethod.InputConnection;
 
 import android.inputmethodservice.InputMethodService;
@@ -19,10 +21,24 @@ public class SimpleIME extends InputMethodService
 
     private Keyboard qwerty_keyboard;
     private Keyboard hangul_keyboard;
+    private Keyboard mCurrent_keyboard;
 
     private boolean caps=false;
     private boolean globe=false;
+    private boolean now_english=false;
 
+    @Override
+    public void onCreate() {
+        SetPreferredColor();
+        super.onCreate();
+    }
+
+    @Override
+    public void onInitializeInterface() {
+        mCurrent_keyboard=new Keyboard(this,R.xml.hangul);
+        hangul_keyboard=new Keyboard(this,R.xml.hangul);
+        qwerty_keyboard=new Keyboard(this,R.xml.qwerty);
+    }
 
     @Override
     public View onCreateInputView() {
@@ -33,10 +49,6 @@ public class SimpleIME extends InputMethodService
         return kv;
     }
 
-    @Override
-    public void onInitializeInterface() {
-        super.onInitializeInterface();
-    }
 
     @Override
     public void onPress(int primaryCode) {
@@ -64,6 +76,14 @@ public class SimpleIME extends InputMethodService
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_ENTER));
                 break;
             case Keyboard.KEYCODE_MODE_CHANGE:
+                if(now_english==false){
+                   kv.setKeyboard(qwerty_keyboard);
+                   now_english=true;
+                }
+                else{
+                    kv.setKeyboard(hangul_keyboard);
+                    now_english=false;
+                }
                 break;
             default:
                 char code=(char)primaryCode;
@@ -100,5 +120,10 @@ public class SimpleIME extends InputMethodService
 
     }
 
+
+    private void SetPreferredColor(){
+        SharedPreferences color_prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        String keyboard_text_color=color_prefs.getString("text_color_preference","red");
+    }
 
 }

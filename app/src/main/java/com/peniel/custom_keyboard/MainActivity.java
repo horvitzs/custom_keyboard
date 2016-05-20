@@ -1,15 +1,20 @@
 package com.peniel.custom_keyboard;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+      /*  getFragmentManager().beginTransaction()
+                .replace(android.R.id.content,new setting_fragment()).commit();*/
         setContentView(R.layout.activity_main);
 
         /*Keyboard myKeyboard=new Keyboard(this,R.xml.m_keyboard);
@@ -18,6 +23,16 @@ public class MainActivity extends Activity {
         myKeyboardView.setPreviewEnabled(false);*/
 
 
+    }
+
+
+    public void myOnClick(View v) {
+        switch (v.getId()){
+            case R.id.keyboard_color_button:
+                Intent intent1=new Intent(this, Theme_Change_Activity.class);
+                startActivity(intent1);
+                break;
+        }
     }
 
 

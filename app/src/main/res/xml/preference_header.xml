@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header android:fragment="com.peniel.custom_keyboard.Theme_Change_Activity$Prefs1fragment"
+        android:icon="@drawable/ic_launcher"
+        android:title="Text Color Setting"
+        android:summary="Change text color of the keyboard"/>
+
+    <header android:fragment="com.peniel.custom_keyboard.Theme_Change_Activity$Prefs2fragment"
+        android:icon="@drawable/ic_launcher"
+        android:title="Background Color Setting"
+        android:summary="Change Background color of the keyboard"/>
+
+</preference-headers>
