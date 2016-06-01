@@ -3,10 +3,10 @@
 
     <PreferenceCategory android:title="Choose the color">
         <ListPreference
-            android:defaultValue="RED"
-            android:dialogTitle="my color"
-            android:key="@string/pref_text_color"
-            android:title="your color"
+            android:defaultValue="Medium"
+            android:dialogTitle="Set Text Size"
+            android:key="text_size_preference"
+            android:title="Text Size"
             android:entries="@array/pref_color_options"
             android:entryValues="@array/pref_color_values"
             />

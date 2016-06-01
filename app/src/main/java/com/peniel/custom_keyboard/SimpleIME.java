@@ -1,6 +1,7 @@
 package com.peniel.custom_keyboard;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
 import android.inputmethodservice.InputMethodService;
@@ -29,10 +30,16 @@ public class SimpleIME extends InputMethodService
 
     @Override
     public void onCreate() {
-        SetPreferredColor();
+
+
         super.onCreate();
     }
 
+
+    public void updateColor(){
+        //SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+    }
     @Override
     public void onInitializeInterface() {
         mCurrent_keyboard=new Keyboard(this,R.xml.hangul);
@@ -42,13 +49,34 @@ public class SimpleIME extends InputMethodService
 
     @Override
     public View onCreateInputView() {
-        kv=(KeyboardView)getLayoutInflater().inflate(R.layout.keyboard,null);
-        keyboard=new Keyboard(this,R.xml.hangul);
+
+       // SharedPreferences color_pref=getSharedPreferences("text_color_preference", Integer.parseInt("red"));
+      //  int txt_color=color_pref.getInt("")
+
+        SharedPreferences color_prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        String keyboard_text_color=color_prefs.getString("text_color_preference","RED");
+
+        if(keyboard_text_color.equals("red"))
+            kv=(KeyboardView)getLayoutInflater().inflate(R.layout.keyboard,null);
+        else if(keyboard_text_color.equals("white"))
+            kv=(KeyboardView)getLayoutInflater().inflate(R.layout.white_keyboard,null);
+        else if(keyboard_text_color.equals("blue"))
+            kv=(KeyboardView)getLayoutInflater().inflate(R.layout.blue_keyboard,null);
+        else
+            kv=(KeyboardView)getLayoutInflater().inflate(R.layout.keyboard,null);
+
+        keyboard=new Keyboard(this,R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
         return kv;
     }
 
+
+    @Override
+    public void onStartInputView(EditorInfo info, boolean restarting) {
+        super.onStartInputView(info, restarting);
+        setInputView(onCreateInputView());
+    }
 
     @Override
     public void onPress(int primaryCode) {
@@ -120,7 +148,7 @@ public class SimpleIME extends InputMethodService
 
     }
 
-
+    //read setting
     private void SetPreferredColor(){
         SharedPreferences color_prefs= PreferenceManager.getDefaultSharedPreferences(this);
         String keyboard_text_color=color_prefs.getString("text_color_preference","red");

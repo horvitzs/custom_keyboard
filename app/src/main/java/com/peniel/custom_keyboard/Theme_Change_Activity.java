@@ -1,6 +1,9 @@
 package com.peniel.custom_keyboard;
 
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -8,8 +11,11 @@ import android.view.View;
 
 import java.util.List;
 
-public class Theme_Change_Activity extends PreferenceActivity {
+public class Theme_Change_Activity extends PreferenceActivity
+         {
 
+
+    KeyboardView blue_keyboard,red_keyboard,white_keyboard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +24,10 @@ public class Theme_Change_Activity extends PreferenceActivity {
             button.setText("Some Action");
             setListFooter(button);
         }*/
+
     }
+
+
 
 
     @Override
@@ -39,13 +48,64 @@ public class Theme_Change_Activity extends PreferenceActivity {
                 }
             }
 
-    public static class Prefs1fragment extends PreferenceFragment{
+
+
+   /* @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals("text_color_preference")){
+            Preference connectionPref=findPreference(key);
+            connectionPref.setSummary(sharedPreferences.getString(key,"red"));
+        }
+    }*/
+
+
+
+    public static class Prefs1fragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             PreferenceManager.setDefaultValues(getActivity(), R.xml.pref1, false);
             addPreferencesFromResource(R.xml.pref1);
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_text_color)));
+
         }
+
+        private void bindPreferenceSummaryToValue(Preference preference){
+            preference.setOnPreferenceChangeListener(this);
+            onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object value) {
+            String stringValue = value.toString();
+
+
+
+
+            if (preference instanceof ListPreference) {
+                // For list preferences, look up the correct display value in
+                // the preference's 'entries' list (since they have separate labels/values).
+                final ListPreference listPreference = (ListPreference) preference;
+                int prefIndex = listPreference.findIndexOfValue(stringValue);
+                if (prefIndex >= 0) {
+                    preference.setSummary(listPreference.getEntries()[prefIndex]);
+                }
+
+
+            }
+            else {
+                // For other preferences, set the summary to the value's simple string representation.
+                preference.setSummary(stringValue);
+            }
+
+
+            return true;
+        }
+
 
 
     }
@@ -54,7 +114,7 @@ public class Theme_Change_Activity extends PreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref1);
+            addPreferencesFromResource(R.xml.pref2);
         }
     }
 

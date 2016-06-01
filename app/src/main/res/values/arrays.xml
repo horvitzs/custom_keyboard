@@ -7,8 +7,8 @@
     </string-array>
 
     <string-array name="pref_color_values">
-        <item>red</item>
-        <item>white</item>
-        <item>blue</item>
+        <item>@string/red_text_theme</item>
+        <item>@string/white_text_theme</item>
+        <item>@string/blue_text_theme</item>
     </string-array>
 </resources>

@@ -4,7 +4,10 @@
 
     <string name="simple_ime">Simple IME</string>
     <string name="subtype_en_US">English</string>
-
+    <string name="pref_text_color">text_color_preference</string>
+    <string name="red_text_theme">red</string>
+    <string name="blue_text_theme">blue</string>
+    <string name="white_text_theme">white</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_theme__change_">Theme_Change_Activity</string>
