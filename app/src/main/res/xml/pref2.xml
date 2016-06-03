@@ -3,12 +3,12 @@
 
     <PreferenceCategory android:title="Choose the color">
         <ListPreference
-            android:defaultValue="Medium"
+            android:defaultValue="medium"
             android:dialogTitle="Set Text Size"
-            android:key="text_size_preference"
+            android:key="@string/pref_text_size"
             android:title="Text Size"
-            android:entries="@array/pref_color_options"
-            android:entryValues="@array/pref_color_values"
+            android:entries="@array/pref_size_options"
+            android:entryValues="@array/pref_size_values"
             />
     </PreferenceCategory>
 

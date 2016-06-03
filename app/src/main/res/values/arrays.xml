@@ -11,4 +11,17 @@
         <item>@string/white_text_theme</item>
         <item>@string/blue_text_theme</item>
     </string-array>
+
+    <string-array name="pref_size_options">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string-array name="pref_size_values">
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+
+    </string-array>
 </resources>

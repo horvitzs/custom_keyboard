@@ -35,6 +35,7 @@ public class SimpleIME extends InputMethodService
     private boolean caps=false;
     private boolean globe=false;
     private boolean now_english=false;
+    private boolean isEmoji=false;
 
     @Override
     public void onCreate() {
@@ -66,7 +67,10 @@ public class SimpleIME extends InputMethodService
       //  int txt_color=color_pref.getInt("")
 
         SharedPreferences color_prefs= PreferenceManager.getDefaultSharedPreferences(this);
-        String keyboard_text_color=color_prefs.getString("text_color_preference","RED");
+        String keyboard_text_color=color_prefs.getString("text_color_preference", "RED");
+
+        SharedPreferences size_prefs=PreferenceManager.getDefaultSharedPreferences(this);
+        String keyboard_text_size=size_prefs.getString("text_size_preference","Medium");
 
         if(keyboard_text_color.equals("red"))
             kv=(KeyboardView)getLayoutInflater().inflate(R.layout.keyboard,null);
@@ -78,9 +82,21 @@ public class SimpleIME extends InputMethodService
             kv=(KeyboardView)getLayoutInflater().inflate(R.layout.keyboard,null);
 
 
+        switch (keyboard_text_size) {
+            case "medium":
+                keyboard = new Keyboard(this, R.xml.qwerty);
+                break;
+            case "small":
+                keyboard = new Keyboard(this, R.xml.qwerty_small);
+                break;
+            case "large":
+                keyboard = new Keyboard(this, R.xml.qwerty_large);
+                break;
+            default:
+                keyboard = new Keyboard(this, R.xml.qwerty);
+                break;
+        }
 
-       // keyboard=new Keyboard(this,R.xml.qwerty);
-        keyboard=new Keyboard(this,R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
         return kv;
@@ -132,17 +148,29 @@ public class SimpleIME extends InputMethodService
                 }
                 break;
             case 188:
+              //  isEmoji=!isEmoji;
                 kv.setKeyboard(EmojiKeyboard_a0);
                 changeEmojiKeyboard(new Keyboard[]{
                         EmojiKeyboard_a0, EmojiKeyboard_a1, EmojiKeyboard_a2
 
                 });
+                break;
             default:
                 char code=(char)primaryCode;
                 if(Character.isLetter(code)&&caps){
                     code=Character.toUpperCase(code);
                 }
-                ic.commitText(String.valueOf(code),1);
+
+              /*  String emoji_string;
+                emoji_string = String.valueOf(ic.commitText(String.valueOf(code),1));
+                ic.commitText(AndroidEmoji.ensure(emoji_string,getApplicationContext()),1);*/
+
+
+              /*  String emoji_string = String.valueOf(code);
+                emoji_string= Emoji.replaceInText(emoji_string);
+                ic.commitText(emoji_string,1);*/
+
+               ic.commitText(String.valueOf(code),1);
         }
 
     }

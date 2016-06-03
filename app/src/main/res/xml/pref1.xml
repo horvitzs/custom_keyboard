@@ -3,7 +3,7 @@
 
     <PreferenceCategory android:title="Choose the color">
         <ListPreference
-            android:defaultValue="RED"
+            android:defaultValue="red"
             android:dialogTitle="my color"
             android:key="@string/pref_text_color"
             android:title="your color"

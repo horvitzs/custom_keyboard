@@ -2,13 +2,14 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header android:fragment="com.peniel.custom_keyboard.Theme_Change_Activity$Prefs1fragment"
-        android:icon="@drawable/ic_launcher"
-        android:title="Text Color Setting"
-        android:summary="Change text color of the keyboard"/>
+        android:title="Keyboard Color Setting"
+        android:summary="Change settings concerning color of the keyboard"
+        android:icon="@drawable/paint_palette2"
+        />
 
     <header android:fragment="com.peniel.custom_keyboard.Theme_Change_Activity$Prefs2fragment"
-        android:icon="@drawable/ic_launcher"
-        android:title="Background Color Setting"
-        android:summary="Change Background color of the keyboard"/>
+        android:title="Size Setting"
+        android:summary="Change settings concerning size of the keyboard"
+        android:icon="@drawable/search"/>
 
 </preference-headers>
