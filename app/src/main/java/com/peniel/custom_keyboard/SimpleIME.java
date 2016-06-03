@@ -1,14 +1,13 @@
 package com.peniel.custom_keyboard;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
-
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 
 /**
  * Created by 진호 on 2016-05-10.
@@ -17,12 +16,21 @@ public class SimpleIME extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener{
 
 
+    //private KeyboardView kv;
     private KeyboardView kv;
     private Keyboard keyboard;
 
     private Keyboard qwerty_keyboard;
     private Keyboard hangul_keyboard;
     private Keyboard mCurrent_keyboard;
+
+    private Keyboard EmojiKeyboard_a0;
+    private Keyboard EmojiKeyboard_a1;
+    private Keyboard EmojiKeyboard_a2;
+    private Keyboard EmojiKeyboard_a3;
+    private Keyboard EmojiKeyboard_a4;
+    private Keyboard EmojiKeyboard_a5;
+
 
     private boolean caps=false;
     private boolean globe=false;
@@ -45,6 +53,10 @@ public class SimpleIME extends InputMethodService
         mCurrent_keyboard=new Keyboard(this,R.xml.hangul);
         hangul_keyboard=new Keyboard(this,R.xml.hangul);
         qwerty_keyboard=new Keyboard(this,R.xml.qwerty);
+
+        EmojiKeyboard_a0=new Keyboard(this,R.xml.emoji_a0);
+        EmojiKeyboard_a1=new Keyboard(this,R.xml.emoji_a1);
+        EmojiKeyboard_a2=new Keyboard(this,R.xml.emoji_a2);
     }
 
     @Override
@@ -65,6 +77,9 @@ public class SimpleIME extends InputMethodService
         else
             kv=(KeyboardView)getLayoutInflater().inflate(R.layout.keyboard,null);
 
+
+
+       // keyboard=new Keyboard(this,R.xml.qwerty);
         keyboard=new Keyboard(this,R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
@@ -80,6 +95,9 @@ public class SimpleIME extends InputMethodService
 
     @Override
     public void onPress(int primaryCode) {
+        if(kv.getKeyboard()==EmojiKeyboard_a0||kv.getKeyboard()==EmojiKeyboard_a1||kv.getKeyboard()==EmojiKeyboard_a2){
+            kv.setPreviewEnabled(false);
+        }
 
     }
 
@@ -113,6 +131,12 @@ public class SimpleIME extends InputMethodService
                     now_english=false;
                 }
                 break;
+            case 188:
+                kv.setKeyboard(EmojiKeyboard_a0);
+                changeEmojiKeyboard(new Keyboard[]{
+                        EmojiKeyboard_a0, EmojiKeyboard_a1, EmojiKeyboard_a2
+
+                });
             default:
                 char code=(char)primaryCode;
                 if(Character.isLetter(code)&&caps){
@@ -123,6 +147,39 @@ public class SimpleIME extends InputMethodService
 
     }
 
+
+    public void changeEmojiKeyboard(Keyboard[] keyboards){
+        int j=0;
+        for (int i=0; i<keyboards.length; i++){
+            if(keyboards[i]==kv.getKeyboard()){
+                j=i;
+                break;
+            }
+        }
+        if(j+1>=keyboards.length){
+            kv.setKeyboard(keyboards[0]);
+        }
+        else{
+            kv.setKeyboard(keyboards[j+1]);
+        }
+    }
+
+    public void changeEmojiKeyboardReverse(Keyboard[] emojiKeyboard) {
+        int j = emojiKeyboard.length - 1;
+        for(int i=emojiKeyboard.length - 1; i>=0; i--) {
+            if (emojiKeyboard[i] == this.kv.getKeyboard()) {
+                j = i;
+                break;
+            }
+        }
+
+        if (j - 1 < 0) {
+            this.kv.setKeyboard(emojiKeyboard[emojiKeyboard.length - 1]);
+        }else{
+            this.kv.setKeyboard(emojiKeyboard[j - 1]);
+        }
+    }
+
     @Override
     public void onText(CharSequence text) {
 
@@ -130,11 +187,16 @@ public class SimpleIME extends InputMethodService
 
     @Override
     public void swipeLeft() {
-
+        changeEmojiKeyboard(new Keyboard[] {
+            EmojiKeyboard_a0,EmojiKeyboard_a1,EmojiKeyboard_a2
+        });
     }
 
     @Override
     public void swipeRight() {
+        changeEmojiKeyboardReverse(new Keyboard[]{
+                EmojiKeyboard_a0, EmojiKeyboard_a1, EmojiKeyboard_a2
+        });
 
     }
 
@@ -147,6 +209,9 @@ public class SimpleIME extends InputMethodService
     public void swipeUp() {
 
     }
+
+
+
 
     //read setting
     private void SetPreferredColor(){
