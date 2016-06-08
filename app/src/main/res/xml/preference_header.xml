@@ -12,4 +12,20 @@
         android:summary="Change settings concerning size of the keyboard"
         android:icon="@drawable/search"/>
 
+
+    <header android:fragment="com.peniel.custom_keyboard.Theme_Change_Activity$Prefs4fragment"
+        android:title="Input Setting"
+        android:summary="Set Input Setting"
+        android:icon="@drawable/microphone"/>
+
+    <header android:fragment="com.peniel.custom_keyboard.Theme_Change_Activity$Prefs5fragment"
+        android:title="Language Setting"
+        android:summary="Set Language Setting"
+        android:icon="@drawable/big_dictionary"/>
+
+    <header android:fragment="com.peniel.custom_keyboard.Theme_Change_Activity$Prefs3fragment"
+        android:title="Detail Setting"
+        android:summary="Set specific settings"
+        android:icon="@drawable/settings"
+        />
 </preference-headers>

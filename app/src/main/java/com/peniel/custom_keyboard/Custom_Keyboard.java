@@ -12,16 +12,22 @@ import android.view.inputmethod.InputConnection;
 /**
  * Created by 진호 on 2016-05-10.
  */
-public class SimpleIME extends InputMethodService
+public class Custom_Keyboard extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener{
 
+
+    private StringBuilder mComposing = new StringBuilder();
 
     //private KeyboardView kv;
     private KeyboardView kv;
     private Keyboard keyboard;
+    private Keyboard keyboard_shift;
 
     private Keyboard qwerty_keyboard;
+    private Keyboard qwerty_shift_keyboard;
     private Keyboard hangul_keyboard;
+    private Keyboard hangul_shift_keyboard;
+    private Keyboard symbol_keyboard;
     private Keyboard mCurrent_keyboard;
 
     private Keyboard EmojiKeyboard_a0;
@@ -34,8 +40,11 @@ public class SimpleIME extends InputMethodService
 
     private boolean caps=false;
     private boolean globe=false;
-    private boolean now_english=false;
+    private boolean now_english=true;
     private boolean isEmoji=false;
+
+    private int last_keyboard = 0;
+    HangulAutomata mHangulAutomata = new HangulAutomata();
 
     @Override
     public void onCreate() {
@@ -51,9 +60,15 @@ public class SimpleIME extends InputMethodService
     }
     @Override
     public void onInitializeInterface() {
-        mCurrent_keyboard=new Keyboard(this,R.xml.hangul);
+        keyboard=new Keyboard(this,R.xml.qwerty);
+        keyboard_shift=new Keyboard(this, R.xml. qwerty_shift);
+
         hangul_keyboard=new Keyboard(this,R.xml.hangul);
+        hangul_shift_keyboard = new Keyboard(this,R.xml.hangul_shift);
         qwerty_keyboard=new Keyboard(this,R.xml.qwerty);
+        qwerty_shift_keyboard=new Keyboard(this,R.xml.qwerty_shift);
+
+        symbol_keyboard = new Keyboard(this, R.xml.symbol);
 
         EmojiKeyboard_a0=new Keyboard(this,R.xml.emoji_a0);
         EmojiKeyboard_a1=new Keyboard(this,R.xml.emoji_a1);
@@ -63,8 +78,16 @@ public class SimpleIME extends InputMethodService
     @Override
     public View onCreateInputView() {
 
-       // SharedPreferences color_pref=getSharedPreferences("text_color_preference", Integer.parseInt("red"));
-      //  int txt_color=color_pref.getInt("")
+        // SharedPreferences color_pref=getSharedPreferences("text_color_preference", Integer.parseInt("red"));
+        //  int txt_color=color_pref.getInt("")
+
+
+        InputConnection ic = getCurrentInputConnection();
+        if (ic != null) {
+            ic.commitText(mComposing, 1);
+        }
+        mComposing.setLength(0);
+        mHangulAutomata.reset();
 
         SharedPreferences color_prefs= PreferenceManager.getDefaultSharedPreferences(this);
         String keyboard_text_color=color_prefs.getString("text_color_preference", "RED");
@@ -84,16 +107,20 @@ public class SimpleIME extends InputMethodService
 
         switch (keyboard_text_size) {
             case "medium":
-                keyboard = new Keyboard(this, R.xml.qwerty);
+                keyboard        = new Keyboard(this, R.xml.qwerty);
+                keyboard_shift = new Keyboard(this, R.xml.qwerty_shift);
                 break;
             case "small":
-                keyboard = new Keyboard(this, R.xml.qwerty_small);
+                keyboard        = new Keyboard(this, R.xml.qwerty_small);
+                keyboard_shift = new Keyboard(this, R.xml.qwerty_shift_small);
                 break;
             case "large":
-                keyboard = new Keyboard(this, R.xml.qwerty_large);
+                keyboard        = new Keyboard(this, R.xml.qwerty_large);
+                keyboard_shift = new Keyboard(this, R.xml.qwerty_shift_large);
                 break;
             default:
-                keyboard = new Keyboard(this, R.xml.qwerty);
+                keyboard = qwerty_keyboard;
+                keyboard_shift = qwerty_shift_keyboard;
                 break;
         }
 
@@ -105,6 +132,7 @@ public class SimpleIME extends InputMethodService
 
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
+
         super.onStartInputView(info, restarting);
         setInputView(onCreateInputView());
     }
@@ -124,23 +152,37 @@ public class SimpleIME extends InputMethodService
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
+        System.out.println(primaryCode);
         InputConnection ic=getCurrentInputConnection();
         switch(primaryCode){
             case Keyboard.KEYCODE_DELETE:
-                ic.deleteSurroundingText(1,0);
-                break;
-            case Keyboard.KEYCODE_SHIFT:
-                caps=!caps;
-                keyboard.setShifted(caps);
-                kv.invalidateAllKeys();
+                if(mComposing.length() > 0){
+                    mHangulAutomata.reset();
+                    mComposing.setLength(0);
+                    ic.setComposingText(mComposing, 0);
+                } else {
+                    try{
+                        CharSequence t = ic.getTextBeforeCursor(1, 0);
+                        System.out.println("0x"+Integer.toHexString(t.charAt(0)));
+                        if(0xd7a3 < t.charAt(0) && t.charAt(0) < 0xE000){
+                            ic.deleteSurroundingText(2,0);
+                        } else {
+                            ic.deleteSurroundingText(1,0);
+                        }
+                    } catch (RuntimeException e) {
+                        System.out.println(e);
+                    }
+
+                }
                 break;
             case Keyboard.KEYCODE_DONE:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_ENTER));
                 break;
             case Keyboard.KEYCODE_MODE_CHANGE:
-                if(now_english==false){
-                   kv.setKeyboard(qwerty_keyboard);
-                   now_english=true;
+                System.out.println(now_english);
+                if(!now_english){
+                    kv.setKeyboard(keyboard);
+                    now_english=true;
                 }
                 else{
                     kv.setKeyboard(hangul_keyboard);
@@ -148,17 +190,85 @@ public class SimpleIME extends InputMethodService
                 }
                 break;
             case 188:
-              //  isEmoji=!isEmoji;
+                isEmoji = true;
+                now_english = false;
                 kv.setKeyboard(EmojiKeyboard_a0);
                 changeEmojiKeyboard(new Keyboard[]{
                         EmojiKeyboard_a0, EmojiKeyboard_a1, EmojiKeyboard_a2
-
                 });
                 break;
+
+            case -3:
+                kv.closing();
+                break;
+
+            case -11:
+                isEmoji = false;
+                kv.setKeyboard(keyboard);
+                now_english=true;
+                break;
+
+            case -120:
+                kv.setKeyboard(keyboard_shift);
+                break;
+
+            case -121:
+                kv.setKeyboard(keyboard);
+                break;
+
+            case -122:
+                kv.setKeyboard(hangul_shift_keyboard);
+                break;
+
+            case -123:
+                kv.setKeyboard(hangul_keyboard);
+                break;
+
+            case -124:
+                kv.setKeyboard(symbol_keyboard);
+                break;
+
+            case -125:
+                if(now_english) {
+                    kv.setKeyboard(keyboard);
+                }
+                else {
+                    kv.setKeyboard(hangul_keyboard);
+                }
+                break;
+
             default:
-                char code=(char)primaryCode;
-                if(Character.isLetter(code)&&caps){
-                    code=Character.toUpperCase(code);
+                if(now_english){
+                    mHangulAutomata.reset();
+                    ic.commitText(new String(Character.toChars(primaryCode)), 1);
+                }
+
+                else if(isEmoji){
+                    mHangulAutomata.reset();
+                    ic.commitText(new String(Character.toChars(primaryCode)), 1);
+                }
+
+                else {
+                    String ret = mHangulAutomata.appendCharacter(primaryCode);
+
+                    if(mHangulAutomata.currentState == 0){
+                        ic.commitText(ret, ret.length());
+                    }
+                    else if(ret.length() >= 1){
+                        ic.commitText(ret.substring(0, ret.length()-1), 1);
+                        mComposing.setLength(0);
+                        mComposing.append(ret.charAt(ret.length() - 1));
+                        ic.setComposingText(mComposing, 1);
+                    }
+                    else {
+                        mComposing.setLength(0);
+                        mComposing.append(ret.charAt(ret.length() - 1));
+                        ic.setComposingText(mComposing, 1);
+                    }
+                }
+
+                if(kv.getKeyboard() == hangul_shift_keyboard){
+                    kv.setKeyboard(hangul_keyboard);
                 }
 
               /*  String emoji_string;
@@ -169,8 +279,6 @@ public class SimpleIME extends InputMethodService
               /*  String emoji_string = String.valueOf(code);
                 emoji_string= Emoji.replaceInText(emoji_string);
                 ic.commitText(emoji_string,1);*/
-
-               ic.commitText(String.valueOf(code),1);
         }
 
     }
@@ -216,7 +324,7 @@ public class SimpleIME extends InputMethodService
     @Override
     public void swipeLeft() {
         changeEmojiKeyboard(new Keyboard[] {
-            EmojiKeyboard_a0,EmojiKeyboard_a1,EmojiKeyboard_a2
+                EmojiKeyboard_a0,EmojiKeyboard_a1,EmojiKeyboard_a2
         });
     }
 

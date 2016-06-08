@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="입력 설정">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="음성입력"
+            android:summary="음성입력 사용 여부를 설정합니다."
+            android:switchTextOn="ON"
+            android:switchTextOff="OFF"
+            android:title="음성입력"/>
+
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="진동"
+            android:summary="진동 여부를 설정합니다"
+            android:title="진동"/>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="자동 수정"
+            android:summary="자동 수정 여부를 설정합니다"
+            android:title="자동 수정"/>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="단어 예측"
+            android:summary="사용자가 자주 쓰는 단어를 바탕으로 입력할 단어를 추측합니다."
+            android:title="단어 예측"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="자동대문자"
+            android:summary="문장 부호 뒤 자동으로 대문자를 입력합니다 "
+            android:title="자동 대문자"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

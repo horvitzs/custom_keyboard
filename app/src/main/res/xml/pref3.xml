@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Size setting">
+    <PreferenceCategory android:title="상세 설정">
         <ListPreference
             android:defaultValue="medium"
             android:dialogTitle="Set Text Size"
@@ -10,6 +10,7 @@
             android:entries="@array/pref_size_options"
             android:entryValues="@array/pref_size_values"
             />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

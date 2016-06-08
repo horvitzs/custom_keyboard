@@ -2,10 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.peniel.custom_keyboard">
 
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:icon="@drawable/keyboard_1"
+        android:label="@string/app_name2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -19,7 +20,7 @@
         </activity>
 
         <service
-            android:name=".SimpleIME"
+            android:name=".Custom_Keyboard"
             android:label="@string/simple_ime"
             android:permission="android.permission.BIND_INPUT_METHOD">
             <meta-data
@@ -28,7 +29,12 @@
 
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
+                <action android:name="android.intent.action.DIAL"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+
             </intent-filter>
+
+
         </service>
 
         <activity

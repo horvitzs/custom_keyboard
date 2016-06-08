@@ -6,6 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:keyPreviewLayout="@layout/preview"
-    android:background="#9C27B0"
-    android:keyTextColor="#0000FF"
+    android:keyTextColor="#FFFFFF"
+    android:keyBackground="@drawable/basic_key_blue"
     />

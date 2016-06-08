@@ -3,9 +3,10 @@ package com.peniel.custom_keyboard;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 public class MainActivity extends Activity {
 
@@ -17,6 +18,16 @@ public class MainActivity extends Activity {
                 .replace(android.R.id.content,new setting_fragment()).commit();*/
         setContentView(R.layout.activity_main);
 
+        Handler handler=new Handler(){
+            public void handleMessage(Message msg){
+                super.handleMessage(msg);
+                startActivity(new Intent(MainActivity.this,Theme_Change_Activity.class));
+                finish();
+            }
+        };
+        handler.sendEmptyMessageDelayed(0,3000);
+
+
         /*Keyboard myKeyboard=new Keyboard(this,R.xml.m_keyboard);
         KeyboardView myKeyboardView=(KeyboardView)findViewById(R.id.keyboard_view);
         myKeyboardView.setKeyboard(myKeyboard);
@@ -26,14 +37,7 @@ public class MainActivity extends Activity {
     }
 
 
-    public void myOnClick(View v) {
-        switch (v.getId()){
-            case R.id.keyboard_color_button:
-                Intent intent1=new Intent(this, Theme_Change_Activity.class);
-                startActivity(intent1);
-                break;
-        }
-    }
+
 
 
     @Override

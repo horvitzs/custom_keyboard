@@ -7,6 +7,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Theme_Change_Activity extends PreferenceActivity
 {
 
 
+    Toolbar mToolbar;
     KeyboardView blue_keyboard,red_keyboard,white_keyboard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +27,15 @@ public class Theme_Change_Activity extends PreferenceActivity
             setListFooter(button);
         }*/
 
+
+
     }
 
 
-
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
 
     @Override
     protected boolean isValidFragment(String fragmentName) {
@@ -170,6 +177,38 @@ public class Theme_Change_Activity extends PreferenceActivity
 
     }
 
+    public static class Prefs4fragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            PreferenceManager.setDefaultValues(getActivity(), R.xml.pref4, false);
+            addPreferencesFromResource(R.xml.pref4);
+
+        }
+    }
 
 
-}
+    public static class Prefs3fragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            PreferenceManager.setDefaultValues(getActivity(), R.xml.pref3, false);
+            addPreferencesFromResource(R.xml.pref3);
+
+        }
+    }
+
+    public static class Prefs5fragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            PreferenceManager.setDefaultValues(getActivity(), R.xml.pref5, false);
+            addPreferencesFromResource(R.xml.pref5);
+
+        }
+
+
+    }
+
+
+    }
